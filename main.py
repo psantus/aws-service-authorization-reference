@@ -174,6 +174,41 @@ async def retrieve_service_resources(service: str) -> Any | None:
             print(f"An error occurred: {e}", file=sys.stderr)
             return None
 
+
+@mcp.tool()
+async def retrieve_service_condition_keys(service: str) -> Any | None:
+    """
+    Retrieve the list of condition keys for a single AWS service
+
+    Args:
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+
+    Outputs:
+        comma separated list of condition keys for this service
+    """
+    url = await find_service_url(service)
+    if not url:
+        print(f"No matching service found for '{service}'", file=sys.stderr)
+        return None
+
+    print(f"Found service match: {url} for service code: {service})", file=sys.stderr)
+
+    headers = {
+        "User-Agent": USER_AGENT,
+        "Accept": "application/json"
+    }
+
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url, headers=headers, timeout=30.0)
+            response.raise_for_status()
+            data = response.json()
+            return ", ".join([condition_key['Name'] for condition_key in data['ConditionKeys']])
+        except Exception as e:
+            print(f"An error occurred: {e}", file=sys.stderr)
+            return None
+
+
 @mcp.tool()
 async def retrieve_service_action_information(service: str, action: str) -> Any | None:
     """
@@ -285,6 +320,61 @@ async def retrieve_service_resource_information(service: str, resource: str) -> 
                                             resource_data['ActionsTargetingResource'].append(action['Name'])
 
                     return resource_data
+            return None
+        except Exception as e:
+            print(f"An error occurred: {e}", file=sys.stderr)
+            return None
+
+@mcp.tool()
+async def retrieve_service_condition_key_information(service: str, condition_key: str) -> Any | None:
+    """
+    Retrieve the Authorization reference data (actions that rely on this condition key) for a single AWS service condition key
+
+    Args:
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+        condition_key: String. The condition key you want to retrieve information for
+
+    Outputs:
+        a json object
+    """
+    url = await find_service_url(service)
+    if not url:
+        print(f"No matching service found for '{service}'", file=sys.stderr)
+        return None
+
+    print(f"Found service match: {url} for service code: {service})", file=sys.stderr)
+
+    headers = {
+        "User-Agent": USER_AGENT,
+        "Accept": "application/json"
+    }
+
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url, headers=headers, timeout=30.0)
+            response.raise_for_status()
+            data = response.json()
+            for condition_key_data in data['ConditionKeys']:
+                if condition_key_data['Name'] == condition_key:
+                    print('Found condition key match!', file=sys.stderr)
+                    # Initialize array if it doesn't exist
+                    condition_key_data['ActionsUsingConditionKey'] = []
+                    # Find Actions that rely on this ConditionKey
+                    for action in data['Actions']:
+                        if 'ActionConditionKeys' in action:
+                            if condition_key in action['ActionConditionKeys']:
+                                condition_key_data['ActionsUsingConditionKey'].append(action['Name'])
+
+                    # Find resources that rely on this ConditionKey
+                    if 'Resources' in data:
+                        condition_key_data['ResourcesUsingConditionKey'] = []
+                        for resource in data['Resources']:
+                            if 'ConditionKeys' in resource:
+                                if condition_key in resource['ConditionKeys']:
+                                    # Name and ARNFormats
+                                    del resource['ConditionKeys']
+                                    condition_key_data['ResourcesUsingConditionKey'].append(resource)
+                    return condition_key_data
             return None
         except Exception as e:
             print(f"An error occurred: {e}", file=sys.stderr)
