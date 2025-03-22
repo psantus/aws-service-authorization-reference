@@ -49,16 +49,32 @@ Add to your Claude settings:
 <summary>Using uv</summary>
 
 ```json
-"aws-service-authorization-reference": {
-  "command": "uv",
-  "args": [
-    "--directory",
-    "/root/to/folder/aws-service-authorization-reference", 
-    "run",
-    "main.py"
+"mcpServers": {
+  "aws-service-authorization-reference": {
+    "command": "uv",
+    "args": [
+      "--directory",
+      "/root/to/folder/aws-service-authorization-reference",
+      "run",
+      "main.py"
     ]
   }
+}
 ```
+</details>
+
+<details>
+<summary>Using docker</summary>
+
+```json
+"mcpServers": {
+  "aws-service-authorization-reference": {
+    "command": "docker",
+    "args": ["run", "-i", "--rm", "psantus86/aws-service-authorization-reference-mcp-server:latest"]
+  }
+}
+```
+</details>
 
 ## Debugging
 
