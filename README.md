@@ -3,6 +3,12 @@
 A Model Context Protocol server providing access to AWS Service Reference Information. 
 This server enables LLMs to retrieve IAM actions, resources and conditions keys.
 
+# Blog posts!
+
+Here is a series of blog posts introducing this tool:
+* (Part 1) [Introducing AWS Service Reference Information MCP Server](https://dev.to/aws-builders/introducing-aws-service-reference-information-mcp-server-15g5) 
+* (Part 2) [AWS Service Reference Information MCP Server: how up-to-date, scoped, reference data helps deliver better answers.](https://dev.to/aws-builders/aws-service-reference-information-mcp-server-how-up-to-date-scoped-reference-data-helps-deliver-gkk)
+
 ### What is AWS Service Authorization Reference?
 AWS Service Authorization Reference is a piece of documentation [available here](https://docs.aws.amazon.com/service-authorization/latest/reference/reference.html) 
 where AWS gives exhaustive reference data on all IAM Actions, Resources and Condition Keys, 
