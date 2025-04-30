@@ -41,9 +41,9 @@ class ServiceCache:
 _cache_manager = ServiceCache()
 
 @mcp.tool()
-async def retrieve_service_codes() -> str | None:
+async def service_codes() -> str | None:
     """
-    Retrieve all services codes that you can use when calling retrieve_service_information, as a comma-separated list
+    Retrieve all services codes that you can use when calling service_information, as a comma-separated list
     """
     service_urls = await get_services_list()
     if not service_urls:
@@ -53,12 +53,12 @@ async def retrieve_service_codes() -> str | None:
     return ", ".join(service_urls.keys())
 
 # @mcp.resource("serviceAuthorizationReference://{service}") # disabled because I get MCP error 0: Unknown resource: every time this is invoked
-async def retrieve_service_information(service: str) -> Any | None:
+async def service_information(service: str) -> Any | None:
     """
     Retrieve the full Authorization reference data (IAM actions, resources and condition keys) for a single AWS service
 
     Args:
-        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call service_codes
 
     Outputs:
         a json object (can be huge, call only if it fits your context window
@@ -87,17 +87,17 @@ async def retrieve_service_information(service: str) -> Any | None:
             return None
 
 @mcp.tool()
-async def retrieve_service_stats(service: str) -> Any | None:
+async def service_stats(service: str) -> Any | None:
     """
     Retrieve statistics (number of Actions, Resources, ConditonKeys) for a single AWS service
 
     Args:
-        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call service_codes
 
     Outputs:
         a json object with stats for this service
     """
-    service_data = await retrieve_service_information(service)
+    service_data = await service_information(service)
     if not service_data:
         print(f"No matching service found for '{service}'", file=sys.stderr)
         return None
@@ -109,12 +109,12 @@ async def retrieve_service_stats(service: str) -> Any | None:
     }
 
 @mcp.tool()
-async def retrieve_service_actions(service: str) -> Any | None:
+async def service_actions(service: str) -> Any | None:
     """
     Retrieve the list of actions for a single AWS service
 
     Args:
-        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call service_codes
 
     Outputs:
         comma separated list of actions for this service
@@ -142,12 +142,12 @@ async def retrieve_service_actions(service: str) -> Any | None:
             return None
 
 @mcp.tool()
-async def retrieve_service_resources(service: str) -> Any | None:
+async def service_resources(service: str) -> Any | None:
     """
     Retrieve the list of resources for a single AWS service
 
     Args:
-        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call service_codes
 
     Outputs:
         comma separated list of resources for this service
@@ -176,12 +176,12 @@ async def retrieve_service_resources(service: str) -> Any | None:
 
 
 @mcp.tool()
-async def retrieve_service_condition_keys(service: str) -> Any | None:
+async def service_condition_keys(service: str) -> Any | None:
     """
     Retrieve the list of condition keys for a single AWS service
 
     Args:
-        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call service_codes
 
     Outputs:
         comma separated list of condition keys for this service
@@ -210,12 +210,12 @@ async def retrieve_service_condition_keys(service: str) -> Any | None:
 
 
 @mcp.tool()
-async def retrieve_service_action_information(service: str, action: str) -> Any | None:
+async def service_action_information(service: str, action: str) -> Any | None:
     """
     Retrieve the Authorization reference data (resources and condition keys) for a single AWS service action
 
     Args:
-        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call service_codes
         action: String. The action you want to retrieve information for
 
     Outputs:
@@ -258,12 +258,12 @@ async def retrieve_service_action_information(service: str, action: str) -> Any 
 
 
 @mcp.tool()
-async def retrieve_service_resource_information(service: str, resource: str) -> Any | None:
+async def service_resource_information(service: str, resource: str) -> Any | None:
     """
     Retrieve the Authorization reference data (actions that target this resource or have condition keys that rely on this resource) for a single AWS service resource
 
     Args:
-        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call service_codes
         resource: String. The resource you want to retrieve information for
 
     Outputs:
@@ -326,12 +326,12 @@ async def retrieve_service_resource_information(service: str, resource: str) -> 
             return None
 
 @mcp.tool()
-async def retrieve_service_condition_key_information(service: str, condition_key: str) -> Any | None:
+async def service_condition_key_information(service: str, condition_key: str) -> Any | None:
     """
     Retrieve the Authorization reference data (actions that rely on this condition key) for a single AWS service condition key
 
     Args:
-        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call retrieve_service_codes
+        service: String. The code of the AWS service need to retrieve information for. If you don't know what the code is, call service_codes
         condition_key: String. The condition key you want to retrieve information for
 
     Outputs:
@@ -380,7 +380,7 @@ async def retrieve_service_condition_key_information(service: str, condition_key
             print(f"An error occurred: {e}", file=sys.stderr)
             return None
 
-async def retrieve_services_list() -> dict[str, str] | None:
+async def services_list() -> dict[str, str] | None:
     """
     Retrieve the list of AWS Services for which AWS provides Authorization reference
     """
@@ -419,7 +419,7 @@ async def get_services_list() -> dict[str, str] | None:
             return _cache_manager.cache
 
         # Fetch and cache if not available
-        _cache_manager.cache = await retrieve_services_list()
+        _cache_manager.cache = await services_list()
         return _cache_manager.cache
 
 
@@ -438,11 +438,11 @@ async def find_service_url(service_code: str) -> Optional[str]:
 def get_iam_reference_data_for_service():
     """Retrieve Authorization reference data (IAM Actions, Objects and Condition Keys) for AWS services"""
     return ('To retrieve information about AWS service, you can use a step by step approach: '
-            'first use the retrieve_service_codes '
+            'first use the service_codes '
             'and find code for the service, '
-            'then use the retrieve_service_actions or retrieve_service_resources '
+            'then use the service_actions or service_resources '
             'depending on whether you need to find information on a specific action '
-            'then use retrieve_service_action_information or retrieve_service_resource_information '
+            'then use service_action_information or service_resource_information '
             'to get specific information.'
             )
 

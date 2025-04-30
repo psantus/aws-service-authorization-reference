@@ -20,22 +20,22 @@ Since March 13, 2025, [Service Reference Information includes](https://aws.amazo
 
 ### Available Tools
 
-- `retrieve_service_codes` - Lists all service codes for which we have documentation available
-- `retrieve_service_stats` - Tells how many Actions, Resources and Condition Keys are documented.
+- `service_codes` - Lists all service codes for which we have documentation available
+- `service_stats` - Tells how many Actions, Resources and Condition Keys are documented.
     - `service` (string, required): the code of the service
-- `retrieve_service_actions` - A comma-separeted list of all actions for a service
+- `service_actions` - A comma-separeted list of all actions for a service
     - `service` (string, required): the code of the service
-- `retrieve_service_resources` - A comma-separeted list of all resources for a service
+- `service_resources` - A comma-separeted list of all resources for a service
     - `service` (string, required): the code of the service
-- `retrieve_service_condition_keys` - A comma-separeted list of all conditions keys for a service
+- `service_condition_keys` - A comma-separeted list of all conditions keys for a service
     - `service` (string, required): the code of the service
-- `retrieve_service_action_information` - Retrieve the authorization reference data (resources and condition keys) for a single AWS service action
+- `service_action_information` - Retrieve the authorization reference data (resources and condition keys) for a single AWS service action
     - `service` (string, required): the code of the service
     - `action` (string, required): the code of the action
-- `retrieve_service_resource_information` - Retrieve the authorization reference data (resources and condition keys) for a single AWS service action
+- `service_resource_information` - Retrieve the authorization reference data (resources and condition keys) for a single AWS service action
     - `service` (string, required): the code of the service
     - `resource` (string, required): the code of the action
-- `retrieve_service_condition_key_information` - Retrieve the authorization reference data (resources and condition keys) for a single AWS service action
+- `service_condition_key_information` - Retrieve the authorization reference data (resources and condition keys) for a single AWS service action
     - `service` (string, required): the code of the service
     - `condition_key` (string, required): the code of the action
 
