@@ -258,7 +258,7 @@ async def service_action_information(service: str, action: str) -> Any | None:
 
 
 @mcp.tool()
-async def service_resource_information(service: str, resource: str) -> Any | None:
+async def service_resource_info(service: str, resource: str) -> Any | None:
     """
     Retrieve the Authorization reference data (actions that target this resource or have condition keys that rely on this resource) for a single AWS service resource
 
@@ -326,7 +326,7 @@ async def service_resource_information(service: str, resource: str) -> Any | Non
             return None
 
 @mcp.tool()
-async def service_condition_key_information(service: str, condition_key: str) -> Any | None:
+async def service_condition_key_info(service: str, condition_key: str) -> Any | None:
     """
     Retrieve the Authorization reference data (actions that rely on this condition key) for a single AWS service condition key
 
